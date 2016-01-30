@@ -2,8 +2,9 @@ var mongoose = require('mongoose');
 
 var dbURI = process.env.DEV_DB_URI;
 
-if (process.env.NODE_ENV === 'production') {
-  dbURI = process.env.MONGOLAB_URI;
+if (isProduction()) {
+  //dbURI = process.env.MONGOLAB_URI;
+  return console.log(`We don't have a production environment setup yet`);
 }
 
 mongoose.connect(dbURI);
@@ -11,20 +12,28 @@ mongoose.connect(dbURI);
 var db = mongoose.connection;
 
 db.on('connected', function() {
-  console.log('Mongoose connected to %s', dbURI);
+  if (isProduction()) {
+    console.log('Mongoose connected to %s', dbURI);
+  }
 });
 
 db.on('error', function(err) {
-  console.log('Mongoose connection error: ' + err);
+  if (isProduction()) {
+    console.log('Mongoose connection error: ' + err);
+  }
 });
 
 db.on('disconnected', function() {
-  console.log('Mongoose disconnected');
+  if (isProduction()) {
+    console.log('Mongoose disconnected');
+  }
 });
 
 var gracefulShutdown = function(msg, callback) {
   db.close(function() {
-    console.log('Mongoose disconnected through %s', msg);
+    if (isProduction()) {
+      console.log('Mongoose disconnected through %s', msg);
+    }
     callback();
   });
 };
@@ -50,4 +59,6 @@ process.on('SIGTERM', function() {
   });
 });
 
-//require('./locations');
+function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}

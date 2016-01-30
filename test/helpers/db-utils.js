@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 require('dotenv').config();
 
-console.log(`I'm in the ${__filename} file`);
-console.log(`The mongoose connections string is ${process.env.DEV_DB_URI}`);
 var DB_URI = process.env.DEV_DB_URI;
 
 beforeEach(function(done) {
+  process.env.NODE_ENV = 'test';
 
   function clearDB() {
     for (var i in mongoose.connection.collections) {
@@ -31,5 +30,9 @@ beforeEach(function(done) {
 
 afterEach(function(done) {
   mongoose.disconnect();
+  // fixes OverwriteModelError: Cannot overwrite `<model name>` model once compiled.
+  // with mocha watch
+  mongoose.models = {};
+  mongoose.modelSchemas = {};
   return done();
 });

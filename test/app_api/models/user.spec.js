@@ -2,8 +2,5 @@
 require('./../../helpers/chai');
 require('./../../helpers/db-utils');
 
-describe('MongoDB setup', function() {
-  it('connects to the database');
-  it('creates a collection');
-  it('creates a record in the collection');
-});
+var user = require('./../../../app_api/models/user');
+
