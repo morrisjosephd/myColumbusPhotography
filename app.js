@@ -1,11 +1,19 @@
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 require('dotenv').config();
-require('./app_api/models/db');
+
+// load models at startup
+var models_path = __dirname + '/app_api/models/';
+fs.readdirSync(models_path).forEach(function(file) {
+  if(file.indexOf('.js')) {
+    require(models_path + '/' + file);
+  }
+});
 
 var routes = require('./app_server/routes/index');
 var users = require('./app_server/routes/users');

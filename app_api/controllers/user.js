@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-//var User = mongoose.model('User');
+var User = mongoose.model('User');
 
-exports.createUser = function(username, password) {
-  return `hello ${username}, your password is ${password}`;
+exports.createUser = function(user) {
+  return `hello ${user.username}, your password is ${user.password}`;
 };
