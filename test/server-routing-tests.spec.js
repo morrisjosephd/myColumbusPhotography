@@ -23,6 +23,7 @@ describe('App server routing', function () {
   });
 
   it('should return a response code of "404" when a url does not exits', function (done) {
+    this.timeout(3000);
     request.get('http://localhost:8000/badUrl', function (err, res, body) {
       if (err) {}
       expect(res.statusCode).to.equal(404);
