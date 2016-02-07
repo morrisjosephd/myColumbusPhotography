@@ -15,8 +15,7 @@ fs.readdirSync(models_path).forEach(function(file) {
   }
 });
 
-var routes = require('./app_server/routes/index');
-var users = require('./app_server/routes/users');
+var routesApi = require('./app_api/routes/index');
 
 var app = express();
 
@@ -26,14 +25,15 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+if (process.env.NODE_ENV != 'test') {
+  app.use(logger('dev'));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/api', routesApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -57,7 +57,7 @@ if (app.get('env') === 'development') {
 }
 
 // production error handler
-// no stacktraces leaked to user
+// no stacktraces leaked to users
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {

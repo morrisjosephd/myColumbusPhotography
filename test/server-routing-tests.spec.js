@@ -1,10 +1,9 @@
-/* global define, it, describe, beforeEach, afterEach, expect, assert, require */
 require('./helpers/chai');
 
 var app = require('../app');
 var request = require('request');
 
-var testPort = 8000;
+var testPort = process.env.TEST_PORT_NUMBER;
 var testServer;
 
 describe('App server routing', function () {
@@ -24,7 +23,7 @@ describe('App server routing', function () {
 
   it('should return a response code of "404" when a url does not exits', function (done) {
     this.timeout(3000);
-    request.get('http://localhost:8000/badUrl', function (err, res, body) {
+    request.get('http://localhost:8000/api/badUrl', function (err, res, body) {
       if (err) {}
       expect(res.statusCode).to.equal(404);
       done();
@@ -32,8 +31,7 @@ describe('App server routing', function () {
   });
 
   it('should return a response code of "200" for the home page', function (done) {
-    request.get('http://localhost:8000/', function (err, res, body) {
-      //  expect(res.statusCode).(404)
+    request.get('http://localhost:8000/api/', function (err, res, body) {
       if (err) {}
       expect(res.statusCode).to.equal(200);
       done();
