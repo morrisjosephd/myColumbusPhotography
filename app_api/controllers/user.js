@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var rs = require('../services/response-service');
 
-exports.createUser = function(req, res) {
+exports.createUser = function(req, res, next) {
 
   User.findOne({username: req.body.username}, function(err, user) {
     if (!user) {
